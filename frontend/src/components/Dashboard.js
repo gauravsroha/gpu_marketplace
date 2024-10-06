@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button} from 'react-bootstrap';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const Dashboard = ({ userId, username }) => {
   const [myListings, setMyListings] = useState([]);
@@ -73,7 +74,7 @@ const Dashboard = ({ userId, username }) => {
       <h1 className="my-4">Dashboard</h1>
       <Row>
         <Col md={6}>
-          <h2>My Listings</h2>
+        <h2>My Listings</h2>
           {myListings.map((listing) => (
             <Card key={listing.id} className="mb-3">
               <Card.Body>
@@ -82,6 +83,9 @@ const Dashboard = ({ userId, username }) => {
                   Price: ${listing.price}<br />
                   Current Highest Bid: ${listing.current_highest_bid || 'No bids yet'}
                 </Card.Text>
+                <Link to={`/update-listing/${listing.id}`}>
+                  <Button variant="primary" className="me-2">Update Listing</Button>
+                </Link>
                 <Button variant="danger" onClick={() => deleteListing(listing.id)}>Delete Listing</Button>
               </Card.Body>
             </Card>

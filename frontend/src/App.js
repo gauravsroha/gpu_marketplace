@@ -8,6 +8,7 @@ import Register from './components/Register';
 import ListingDetail from './components/ListingDetail';
 import Dashboard from './components/Dashboard';
 import CreateListing from './components/CreateListing';
+import UpdateListing from './components/UpdateListing';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -75,6 +76,10 @@ function App() {
         <Route
           path="/create-listing"
           element={isLoggedIn ? <CreateListing /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/update-listing/:id"
+          element={isLoggedIn ? <UpdateListing /> : <Navigate to="/login" />}
         />
       </Routes>
     </div>
