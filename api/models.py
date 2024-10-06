@@ -16,6 +16,9 @@ class GPUListing(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def has_ended(self):
+        return timezone.now() > self.end_time
 
     def save(self, *args, **kwargs):
         if self.seller:

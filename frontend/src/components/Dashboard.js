@@ -81,7 +81,7 @@ const Dashboard = ({ userId, username }) => {
                 <Card.Title>{listing.title}</Card.Title>
                 <Card.Text>
                   Price: ${listing.price}<br />
-                  Current Highest Bid: ${listing.current_highest_bid || 'No bids yet'}
+                  Current Highest Bid: {listing.current_highest_bid ? `$${listing.current_highest_bid}` : 'No bids yet'}
                 </Card.Text>
                 <Link to={`/update-listing/${listing.id}`}>
                   <Button variant="primary" className="me-2">Update Listing</Button>

@@ -28,11 +28,13 @@ class BidSerializer(serializers.ModelSerializer):
 class GPUListingSerializer(serializers.ModelSerializer):
     seller = serializers.ReadOnlyField(source='seller.username')
     seller_name = serializers.ReadOnlyField()
+    seller_id = serializers.ReadOnlyField(source='seller.id')
     bids = BidSerializer(many=True, read_only=True)
     current_highest_bid = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
+    has_ended = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = GPUListing
-        fields = ['id', 'title', 'price', 'brand', 'model', 'seller', 'seller_name', 
-                 'created_at', 'end_time', 'current_highest_bid', 'bids']
-        read_only_fields = ['id', 'created_at', 'seller_name', 'current_highest_bid']
+        fields = ['id', 'title', 'price', 'brand', 'model', 'seller', 'seller_id', 'seller_name', 
+                 'created_at', 'end_time', 'current_highest_bid', 'bids', 'has_ended']  # Added 'has_ended'
+        read_only_fields = ['id', 'created_at', 'seller_name', 'seller_id', 'current_highest_bid']

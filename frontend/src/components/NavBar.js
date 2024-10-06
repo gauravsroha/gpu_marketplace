@@ -6,7 +6,7 @@ const NavBar = ({ isLoggedIn, username, handleLogout }) => {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand as={Link} to="/">GPU Marketplace</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/">gpuX</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">

@@ -60,6 +60,9 @@ class BidViewSet(viewsets.ModelViewSet):
         listing = serializer.validated_data['listing']
         amount = serializer.validated_data['amount']
 
+        if listing.seller == self.request.user:
+            raise serializers.ValidationError("You cannot bid on your own listing")
+
         if listing.end_time < timezone.now():
             raise serializers.ValidationError("This auction has ended")
 

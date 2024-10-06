@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
+
+// Component imports
 import NavBar from './components/NavBar';
 import Home from './components/Home';
 import Login from './components/Login';
@@ -68,7 +70,10 @@ function App() {
           } 
         />
         <Route path="/register" element={<Register />} />
-        <Route path="/listing/:id" element={<ListingDetail isLoggedIn={isLoggedIn} />} />
+        <Route 
+          path="/listing/:id" 
+          element={<ListingDetail isLoggedIn={isLoggedIn} userId={userId} />} 
+        />
         <Route
           path="/dashboard"
           element={isLoggedIn ? <Dashboard userId={userId} username={username} /> : <Navigate to="/login" />}

@@ -12,6 +12,8 @@ const UpdateListing = () => {
     end_time: ''
   });
   const [error, setError] = useState('');
+  const [originalPrice, setOriginalPrice] = useState(0);
+  const [currentHighestBid, setCurrentHighestBid] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -25,6 +27,8 @@ const UpdateListing = () => {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setFormData(response.data);
+      setOriginalPrice(parseFloat(response.data.price));
+      setCurrentHighestBid(response.data.current_highest_bid ? parseFloat(response.data.current_highest_bid) : null);
     } catch (error) {
       console.error('Error fetching listing data:', error);
       setError('Failed to fetch listing data. Please try again.');
@@ -32,12 +36,27 @@ const UpdateListing = () => {
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const newPrice = parseFloat(formData.price);
+
+      /* if (newPrice > originalPrice) {
+        setError('The new price cannot be higher than the original price.');
+        return;
+      }
+      */
+
+      if (currentHighestBid !== null && newPrice > currentHighestBid) {
+        setError('The new price cannot be more than the current highest bid.');
+        return;
+      }
+
       await axios.put(`http://localhost:8000/api/listings/${id}/`, formData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
@@ -72,6 +91,12 @@ const UpdateListing = () => {
             onChange={handleChange}
             required
           />
+          <Form.Text className="text-muted">
+            Original price: ${originalPrice}.
+            {currentHighestBid !== null 
+              ? ` Current highest bid: $${currentHighestBid}. New price must be atmost $${currentHighestBid}.`
+              : ' No current bids. You can increase or decrease the price according to you'}
+          </Form.Text>
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Brand</Form.Label>

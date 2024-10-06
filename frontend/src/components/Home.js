@@ -31,7 +31,7 @@ const Home = () => {
                   Brand: {listing.brand}<br />
                   Model: {listing.model}<br />
                   Price: ${listing.price}<br />
-                  Current Highest Bid: ${listing.current_highest_bid || 'No bids yet'}
+                  Current Highest Bid: {listing.current_highest_bid ? `$${listing.current_highest_bid}` : 'No bids yet'}
                 </Card.Text>
                 <Link to={`/listing/${listing.id}`}>
                   <Button variant="primary">View Details</Button>
