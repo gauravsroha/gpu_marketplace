@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ listing.title }}</h1>
+<p>Brand: {{ listing.brand }}</p>
+<p>Model: {{ listing.model }}</p>
+<p>Price: ${{ listing.price }}</p>
+<p>Current Highest Bid: ${{ listing.current_highest_bid|default:"No bids yet" }}</p>
+<p>Seller: {{ listing.seller_name }}</p>
+<p>End Time: {{ listing.end_time }}</p>
+
+{% if user.is_authenticated and user != listing.seller %}
+<h2>Place a Bid</h2>
+<form method="post" action="{% url 'create_bid' listing.id %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="amount">Bid Amount</label>
+        <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Place Bid</button>
+</form>
+{% endif %}
+
+<h2>Bid History</h2>
+<ul class="list-group">
+    {% for bid in listing.bids.all %}
+    <li class="list-group-item">{{ bid.bidder }}: ${{ bid.amount }} ({{ bid.created_at }})</li>
+    {% empty %}
+    <li class="list-group-item">No bids yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
