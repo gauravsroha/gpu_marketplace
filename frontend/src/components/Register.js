@@ -4,28 +4,28 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
-  const [formData, setFormData] = useState({ username: '', email: '', password: '' });
+  const [formData, setFormData] = useState({ username: '', email: '', password: '' }); //Hooks with their initial state
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value }); //Adds the value of diff form fields to formData
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); //To stop the blank submission of the form
     try {
-      await axios.post('http://localhost:8000/api/register/', formData);
-      navigate('/login');
+      await axios.post('http://localhost:8000/api/register/', formData); //Sends data to RegisterView in backend(urls.py) for registration
+      navigate('/login'); //If registration gets successful
     } catch (error) {
-      setError('Registration failed. Please try again.');
+      setError('Registration failed. Please try again.'); //If registrations fails from the backend
     }
   };
 
   return (
     <Container>
       <h1 className="my-4">Register</h1>
-      {error && <Alert variant="danger">{error}</Alert>}
+      {error && <Alert variant="danger">{error}</Alert>}  {/* If any error occurs while load, it shows in the page */}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Username</Form.Label>

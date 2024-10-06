@@ -26,10 +26,10 @@ function App() {
       setIsLoading(false);
     }
   }, []);
-
-  const fetchUserInfo = async (token) => {
+ 
+  const fetchUserInfo = async (token) => { //executes only when the token is present, means after logging when we save the token to the local storage
     try {
-      const response = await axios.get('http://localhost:8000/api/user/', {
+      const response = await axios.get('http://localhost:8000/api/user/', { 
         headers: { Authorization: `Bearer ${token}` }
       });
       setIsLoggedIn(true);
@@ -39,7 +39,7 @@ function App() {
       console.error('Error fetching user info:', error);
       localStorage.removeItem('token');
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); //Stops the loading page, if the rquest is true or false
     }
   };
 

@@ -46,11 +46,6 @@ const UpdateListing = () => {
     try {
       const newPrice = parseFloat(formData.price);
 
-      /* if (newPrice > originalPrice) {
-        setError('The new price cannot be higher than the original price.');
-        return;
-      }
-      */
 
       if (currentHighestBid !== null && newPrice > currentHighestBid) {
         setError('The new price cannot be more than the current highest bid.');

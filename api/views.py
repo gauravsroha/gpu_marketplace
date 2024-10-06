@@ -14,49 +14,49 @@ from .models import GPUListing, Bid
 
 class RegisterAPIView(APIView):
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            refresh = RefreshToken.for_user(user)
+        serializer = UserSerializer(data=request.data) #creates a serializer object of type UserSerializer with the data receiver from the request
+        if serializer.is_valid(): 
+            user = serializer.save() #Creates a new user
+            refresh = RefreshToken.for_user(user) #generate a refresh token
             return Response({
                 'refresh': str(refresh),
-                'access': str(refresh.access_token),
-                'user': serializer.data
+                'access': str(refresh.access_token), #The jwt token which is used for authorization 
+                'user': serializer.data #serialized data of the user 
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class LoginAPIView(APIView):
+class LoginAPIView(APIView): 
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
         user = authenticate(username=username, password=password)
-        if user:
+        if user: #If authentication successfull
             refresh = RefreshToken.for_user(user)
-            return Response({
+            return Response({ #The response is sent with access token to be stored in order to keep authentication
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
                 'user': UserSerializer(user).data
             })
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
 
-class LogoutAPIView(APIView):
-    permission_classes = (IsAuthenticated,)
+#class LogoutAPIView(APIView):
+    #permission_classes = (IsAuthenticated)
 
-    def post(self, request):
-        try:
-            refresh_token = request.data["refresh_token"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+    #def post(self, request):
+       # try:
+        #    refresh_token = request.data["refresh_token"]
+        #    token = RefreshToken(refresh_token)
+        #    token.blacklist()
+        #    return Response(status=status.HTTP_205_RESET_CONTENT)
+        #except Exception as e:
+         #   return Response(status=status.HTTP_400_BAD_REQUEST) 
 
 class BidViewSet(viewsets.ModelViewSet):
     queryset = Bid.objects.all()
     serializer_class = BidSerializer
     permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer): #Method called after a new bid is created and extracting id and amount from the request
         listing = serializer.validated_data['listing']
         amount = serializer.validated_data['amount']
 
@@ -94,7 +94,7 @@ class BidViewSet(viewsets.ModelViewSet):
             bid.delete()
 
             # Find the new highest bid
-            highest_bid = Bid.objects.filter(listing=listing).order_by('-amount').first()
+            highest_bid = Bid.objects.filter(listing=listing).order_by('-amount').first() 
             
             # Update the listing's current_highest_bid
             if highest_bid:
@@ -116,12 +116,12 @@ class BidViewSet(viewsets.ModelViewSet):
             }, status=status.HTTP_400_BAD_REQUEST)
 
 class GPUListingViewSet(viewsets.ModelViewSet):
-    queryset = GPUListing.objects.all()
-    serializer_class = GPUListingSerializer
+    queryset = GPUListing.objects.all() #fetches all the GPUListingobjects
+    serializer_class = GPUListingSerializer 
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
-    def perform_create(self, serializer):
-        serializer.save(seller=self.request.user)
+    def perform_create(self, serializer): #Used to save a new GPUListing object
+        serializer.save(seller=self.request.user) #Current user gets saved as the seller
 
     def destroy(self, request, *args, **kwargs):
         listing = self.get_object()
@@ -134,19 +134,19 @@ class GPUListingViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def my_listings(self, request):
-        listings = GPUListing.objects.filter(seller=request.user)
+        listings = GPUListing.objects.filter(seller=request.user) #Gets the listings of the current user
         serializer = self.get_serializer(listings, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data) #Sends the list of user listings to frontend
 
     @action(detail=False, methods=['get'])
     def my_bids(self, request):
-        bids = Bid.objects.filter(bidder=request.user)
+        bids = Bid.objects.filter(bidder=request.user) #Gets the bids of the current user
         listings = GPUListing.objects.filter(bids__in=bids).distinct().prefetch_related('bids')
         serializer = self.get_serializer(listings, many=True)
         return Response(serializer.data)
 
 class CurrentUserView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated] #IF user is authenticated, he can do CRUD operations to his listing and bids 
 
     def get(self, request):
         serializer = UserSerializer(request.user)

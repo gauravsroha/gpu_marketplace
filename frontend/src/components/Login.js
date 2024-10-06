@@ -3,8 +3,8 @@ import { Container, Form, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const Login = ({ setIsLoggedIn, setUsername, setUserId }) => {  // Add setUserId prop
-  const [formData, setFormData] = useState({ username: '', password: '' });
+const Login = ({ setIsLoggedIn, setUsername, setUserId }) => {  
+  const [formData, setFormData] = useState({ username: '', password: '' }); 
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -15,12 +15,12 @@ const Login = ({ setIsLoggedIn, setUsername, setUserId }) => {  // Add setUserId
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/api/login/', formData);
-      localStorage.setItem('token', response.data.access);
+      const response = await axios.post('http://localhost:8000/api/login/', formData); //sends form data to the backend
+      localStorage.setItem('token', response.data.access); //Takes the token from the response and stores it in local storage
       setIsLoggedIn(true);
-      setUsername(response.data.user.username);  // Changed from formData.username to response data
+      setUsername(response.data.user.username);  
       setUserId(response.data.user.id);
-      navigate('/');
+      navigate('/'); //Updates the user field and navigates to the home page
     } catch (error) {
       setError('Invalid credentials. Please try again.');
     }

@@ -10,7 +10,7 @@ const Dashboard = ({ userId, username }) => {
 
   useEffect(() => {
     fetchDashboardData();
-  }, []);
+  }, []); //Runs only once
 
   const fetchDashboardData = async () => {
     try {
@@ -35,7 +35,7 @@ const Dashboard = ({ userId, username }) => {
       await axios.delete(`http://localhost:8000/api/listings/${listingId}/`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
-      setMyListings(myListings.filter(listing => listing.id !== listingId));
+      setMyListings(myListings.filter(listing => listing.id !== listingId)); //updates state by removing the deleted listing
     } catch (error) {
       console.error('Error deleting listing:', error);
       setError('Failed to delete listing. Please try again.');
@@ -96,7 +96,7 @@ const Dashboard = ({ userId, username }) => {
         <h2>My Bids</h2>
         {myBids.map((listing) => {
             const myHighestBid = listing.bids
-            .filter(bid => bid.bidder === username)  // Change from userId to username
+            .filter(bid => bid.bidder === username)  //Only searches in user's bid
             .reduce((max, bid) => Math.max(max, bid.amount), 0);
             
             return (

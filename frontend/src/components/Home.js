@@ -6,16 +6,16 @@ import { Link } from 'react-router-dom';
 const Home = () => {
   const [listings, setListings] = useState([]);
 
-  useEffect(() => {
+  useEffect(() => { //Use effect runs on every render and shows the data according to the condition fulfilled
     const fetchListings = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/listings/');
-        setListings(response.data);
+        const response = await axios.get('http://localhost:8000/api/listings/'); //Sends request to backend to fetch listing
+        setListings(response.data); //If successful, setListings is assigned the values
       } catch (error) {
         console.error('Error fetching listings:', error);
       }
     };
-    fetchListings();
+    fetchListings(); //Whenever the page renders, the function is called
   }, []);
 
   return (
@@ -33,7 +33,7 @@ const Home = () => {
                   Price: ${listing.price}<br />
                   Current Highest Bid: {listing.current_highest_bid ? `$${listing.current_highest_bid}` : 'No bids yet'}
                 </Card.Text>
-                <Link to={`/listing/${listing.id}`}>
+                <Link to={`/listing/${listing.id}`}> {/*Links to the route defined in App.js*/}
                   <Button variant="primary">View Details</Button>
                 </Link>
               </Card.Body>

@@ -15,13 +15,13 @@ const CreateListing = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value }); //Copies the values to FormData
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8000/api/listings/', formData, {
+      await axios.post('http://localhost:8000/api/listings/', formData, { //If authenticated properly and added listing, navigate to the dashboard
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       navigate('/dashboard');

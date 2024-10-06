@@ -10,6 +10,6 @@ router.register(r'bids', BidViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('api/', include('api.urls')),  # This will include the auth URLs
+    path('api/', include('api.urls')),
     path('api/current-user/', CurrentUserView.as_view(), name='current_user'),
 ]

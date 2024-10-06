@@ -14,7 +14,7 @@ const ListingDetail = ({ isLoggedIn, userId }) => {
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/listings/${id}/`);
+        const response = await axios.get(`http://localhost:8000/api/listings/${id}/`); 
         setListing(response.data);
       } catch (error) {
         console.error('Error fetching listing:', error);
@@ -25,7 +25,7 @@ const ListingDetail = ({ isLoggedIn, userId }) => {
       }
     };
 
-    fetchListing();
+    fetchListing(); //gives the dependency of [id] and tells to run whenever the value of [id] changes
   }, [id]);
 
   const handleBid = async (e) => {
@@ -38,13 +38,13 @@ const ListingDetail = ({ isLoggedIn, userId }) => {
     try {
       const response = await axios.post(
         'http://localhost:8000/api/bids/',
-        { listing: id, amount: bidAmount },
+        { listing: id, amount: bidAmount }, //Sending the listing ID and bid amount with user token
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
       setError('');
       setSuccess('Bid placed successfully!');
-      setListing(prevListing => ({ ...prevListing, current_highest_bid: response.data.amount }));
-      setBidAmount('');
+      setListing(prevListing => ({ ...prevListing, current_highest_bid: response.data.amount })); //Updates current_highest_bid
+      setBidAmount('');//In case user wants to add a new bid
     } catch (error) {
       setSuccess('');
       setError('Failed to place bid. Please try again.');

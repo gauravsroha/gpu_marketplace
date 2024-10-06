@@ -10,11 +10,11 @@ const NavBar = ({ isLoggedIn, username, handleLogout }) => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
-            {isLoggedIn ? (
+            {isLoggedIn ? ( //Gets the props from app.js and renders the navbar accordingly
               <>
                 <Nav.Link as={Link} to="/dashboard">Dashboard</Nav.Link>
                 <Nav.Link as={Link} to="/create-listing">Create Listing</Nav.Link>
-                <Nav.Link onClick={handleLogout}>Logout ({username})</Nav.Link>
+                <Nav.Link onClick={handleLogout}>Logout ({username})</Nav.Link>   {/*On clicking, invokes the handle logout function*/}
               </>
             ) : (
               <>

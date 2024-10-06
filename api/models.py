@@ -21,7 +21,7 @@ class GPUListing(models.Model):
         return timezone.now() > self.end_time
 
     def save(self, *args, **kwargs):
-        if self.seller:
+        if self.seller: #If the seller exists assign the seller_name field and then only save
             self.seller_name = self.seller.username
         super().save(*args, **kwargs)
 
@@ -33,7 +33,7 @@ class Bid(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-amount']  # Highest bid first
+        ordering = ['-amount']  #Priority queue like structure, orders in Decreasing order
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
