@@ -1,3 +1,6 @@
+node_modules
+gpu_marketplace/frontend/node_modules
+gpu_marketplace/frontend/build
 **/__pycache__
 *.pyc
 *.pyo
