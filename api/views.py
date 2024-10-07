@@ -98,7 +98,7 @@ class BidViewSet(viewsets.ModelViewSet):
             
             # Update the listing's current_highest_bid
             if highest_bid:
-                listing.current_highest_bid = highest_bid.amount
+                listing.current_highest_bid <= highest_bid.amount
             else:
                 listing.current_highest_bid = None
             
